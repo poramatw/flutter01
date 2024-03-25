@@ -5,11 +5,10 @@ import '../models/cart_models.dart';
 class CreateProvider extends ChangeNotifier {
   int _count = 0;
 
-  void increment(){
+  void increment() {
     _count++;
     notifyListeners();
   }
-  
 }
 
 class CartProvider extends ChangeNotifier {
@@ -19,15 +18,18 @@ class CartProvider extends ChangeNotifier {
 
   double get totalPrice => _items.fold(0.0, (sum, item) => sum + item.price);
 
-  void addItem(Product product){
+  void addItem(Product product) {
     _items.add(product);
     notifyListeners();
   }
 
-  void removeItem(Product product){
+  void removeItem(Product product) {
     _items.remove(product);
     notifyListeners();
   }
-  
-  
+
+  void removeAll() {
+    _items.clear();
+    notifyListeners();
+  }
 }

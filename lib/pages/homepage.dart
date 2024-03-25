@@ -1,6 +1,7 @@
 // ignore_for_file: sized_box_for_whitespace, prefer_const_constructors_in_immutables
 
 import 'package:flutter/material.dart';
+import 'package:practice01/components/components/right_drawer.dart';
 
 import '../components/widgets/main_content.dart';
 import '../components/widgets/notice.dart';

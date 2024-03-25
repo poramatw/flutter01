@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:practice01/pages/homepage.dart';
+import 'package:practice01/pages/login.dart';
 
 class Welcome extends StatelessWidget {
   const Welcome({super.key});
@@ -45,7 +46,7 @@ class Welcome extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => Homepage(),
+                    builder: (context) => Login(),
                   ));
                 },
                 child: Container(

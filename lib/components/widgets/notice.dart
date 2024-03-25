@@ -37,12 +37,64 @@ class Notice extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('Total Price: \$${cart.totalPrice}'),
-                ElevatedButton(onPressed: () {}, child: const Text('Checkout'))
+                ElevatedButton(
+                    onPressed: () => _showCartItems(context, cart),
+                    child: const Text('Checkout'))
               ],
             ),
           )
         ],
       ),
     );
+  }
+
+  void _showCartItems(BuildContext context, CartProvider cart) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) => SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    const Text('Cart Items:'),
+                    const Divider(),
+                    Expanded(
+                        child: ListView.separated(
+                      separatorBuilder: (context, index) => const SizedBox(
+                        height: 10,
+                      ),
+                      itemCount: cart.items.length,
+                      itemBuilder: (context, index) {
+                        final item = cart.items[index];
+                        return Dismissible(
+                          key: UniqueKey(),
+                          background: Container(
+                            color: Colors.red,
+                            child: const Icon(
+                              Icons.delete,
+                              color: Colors.white,
+                            ),
+                          ),
+                          onDismissed: (direction) {
+                            cart.removeItem(item);
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text('Remove ${item.title} from cart'),
+                              action: SnackBarAction(
+                                label: 'Undo',
+                                onPressed: () => cart.addItem(item),
+                              ),
+                            ));
+                          },
+                          child: ListTile(
+                            title: Text(item.title),
+                            subtitle: Text('Price: \$${item.price}'),
+                          ),
+                        );
+                      },
+                    ))
+                  ],
+                ),
+              ),
+            ));
   }
 }

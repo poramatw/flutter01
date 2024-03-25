@@ -10,7 +10,9 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  // create variables
   late final int _posts = 25;
+  late bool onImage = true;
 
   @override
   Widget build(BuildContext context) {
@@ -101,9 +103,9 @@ class _ProfileState extends State<Profile> {
           // contents,
           Expanded(
               child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 childAspectRatio: 1,
-                crossAxisCount: 3,
+                crossAxisCount: onImage ? 3 : 1,
                 mainAxisSpacing: 4,
                 crossAxisSpacing: 4),
             itemCount: _posts,
@@ -113,9 +115,16 @@ class _ProfileState extends State<Profile> {
                   // height: 250,
                   color: Color.fromRGBO(random.nextInt(255),
                       random.nextInt(255), random.nextInt(255), 1),
-                  child: Image.network(
-                    'https://api.slingacademy.com/public/sample-photos/${index + random.nextInt(50)}.jpeg',
-                    fit: BoxFit.cover,
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        onImage = !onImage;
+                      });
+                    },
+                    child: Image.network(
+                      'https://api.slingacademy.com/public/sample-photos/${index + random.nextInt(50)}.jpeg',
+                      fit: BoxFit.cover,
+                    ),
                   ));
             },
           ))

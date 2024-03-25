@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:practice01/api/image_fetch.dart';
 
 import '../../models/home_models.dart';
 
@@ -14,8 +15,9 @@ class MainContent extends StatefulWidget {
 class _MainContentState extends State<MainContent> {
   // create list variables
   List<HomeModel> getModel = [];
+  Future<List<FetchImage>> images = fetchImageFromApi();
 
-   // create function
+  // create function
   void fetchData() {
     getModel = HomeModel.addModel();
   }
@@ -30,6 +32,114 @@ class _MainContentState extends State<MainContent> {
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder<List<FetchImage>>(
+      future: images,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final images = snapshot.data!;
+
+          return ListView.builder(
+            scrollDirection: Axis.vertical,
+            itemCount: images.length,
+            itemBuilder: (context, index) {
+              final image = images[index];
+              return Container(
+                color: Colors.grey[200],
+                height: 500,
+                child: Column(
+                  children: [
+                    Expanded(
+                        flex: 3,
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Image.network(
+                            image.url,
+                            fit: BoxFit.fill,
+                          ),
+                        )),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      getModel[index].isFav =
+                                          !getModel[index].isFav;
+                                    });
+                                  },
+                                  icon: getModel[index].isFav
+                                      ? const Icon(
+                                          Icons.favorite_border_outlined)
+                                      : const Icon(
+                                          Icons.favorite,
+                                          color: Colors.red,
+                                        )),
+                              IconButton(
+                                  onPressed: () {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      builder: (context) {
+                                        return Container(
+                                          color: Colors.grey,
+                                        );
+                                      },
+                                    );
+                                  },
+                                  icon: const Icon(Icons.comment)),
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(Icons.share_outlined)),
+                              const Spacer(),
+                              IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      getModel[index].isBook =
+                                          !getModel[index].isBook;
+                                    });
+                                  },
+                                  icon: getModel[index].isBook
+                                      ? const Icon(
+                                          Icons.bookmark_border_outlined)
+                                      : Icon(
+                                          Icons.bookmark,
+                                          color: Colors.yellow[600],
+                                        ))
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(getModel[index].header),
+                                Text(getModel[index].detail),
+                                Text(getModel[index].comment)
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              );
+              ;
+            },
+          );
+        } else if (snapshot.hasError) {
+          print(snapshot.error);
+          return Text('${snapshot.error}');
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+  }
+
+  Container mockUp() {
     return Container(
       // color: Colors.blue[100],
       child: ListView.separated(
