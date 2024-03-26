@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import '../models/cart_models.dart';
 
 class CreateProvider extends ChangeNotifier {
-  int _count = 0;
+  int count = 0;
 
   void increment() {
-    _count++;
+    count++;
     notifyListeners();
   }
 }

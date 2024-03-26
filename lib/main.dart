@@ -5,11 +5,11 @@ import 'package:practice01/provider/provider_service.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp( MultiProvider(
-    providers: [
-      ChangeNotifierProvider<CartProvider>(create: (context) => CartProvider(),),
-    ],
-    child: const MyApp()));
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider<CartProvider>(
+      create: (context) => CartProvider(),
+    ),
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -22,11 +22,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          brightness: Brightness.light),
       home: const Welcome(),
     );
   }
 }
-

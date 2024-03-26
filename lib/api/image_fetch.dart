@@ -1,53 +1,37 @@
-import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
+Future<List<dynamic>> fetchDataAPI() async {
+    final url = Uri.https('api.slingacademy.com', 'v1/sample-data/photos');
 
-Future<List<FetchImage>> fetchImageFromApi() async {
-  final response =
-      await http.get(Uri.http('jsonplaceholder.typicode.com', '/photos'));
+    try {
+      final response = await http.get(url);
 
-  if (response.statusCode == 200) {
-    final jsonData = jsonDecode(response.body);
-    final images = fetchImageFromJson(jsonData as List<dynamic>);
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
 
-    return images;
-  } else {
-    throw Exception('Failed to fetch images');
+        return jsonData['photos'];
+      } else {
+        throw Exception('Failed to fetch images: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Failed to fetch images: $e');
+    }
   }
-}
-
-List<FetchImage> fetchImageFromJson(List<dynamic> jsonData) {
-  return jsonData.map((imageJson) => FetchImage.fromJson(imageJson)).toList();
-}
 
 
-class FetchImage {
-  int albumId;
-  int id;
-  String title;
+
+class Photo {
   String url;
-  String thumbnailUrl;
+  int user;
+  String title;
+  int id;
+  String description;
 
-  FetchImage({
-    required this.albumId,
-    required this.id,
-    required this.title,
+  Photo({
     required this.url,
-    required this.thumbnailUrl,
+    required this.user,
+    required this.title,
+    required this.id,
+    required this.description,
   });
-
-  factory FetchImage.fromJson(Map<String, dynamic> json) => FetchImage(
-        albumId: json["albumId"],
-        id: json["id"],
-        title: json["title"],
-        url: json["url"],
-        thumbnailUrl: json["thumbnailUrl"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "albumId": albumId,
-        "id": id,
-        "title": title,
-        "url": url,
-        "thumbnailUrl": thumbnailUrl,
-      };
 }
